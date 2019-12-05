@@ -1,0 +1,60 @@
+function letTheMagicHappen()
+        {
+            let input = document.getElementById("input").value;
+            let partA = a(input, String(b) + String(a));
+            let partB = b(input, String(a) + String(b));
+
+            let full = '';
+            for (let i = 0; i < partA.length; i += 2)
+            {
+                full += String.fromCharCode((partA[i] >> 8) % 90 + 31);
+                full += String.fromCharCode((partB[i]) % 90 + 31);
+                full += String.fromCharCode((partA[i + 1] & 255) % 90 + 31);
+                full += String.fromCharCode((partB[i + 1]) % 90 + 31);
+            }
+
+            if (full == 'eeee')
+            {
+                alert('Now you know too much, our secret plan was to: ' + input);
+            }
+            else
+            {
+                alert('Incorrect');
+            }
+        }
+
+        function a(input, otherStr)
+        {
+            let returnable = [];
+            let val = 0;
+            for (let i = 0; i < otherStr.length; i++)
+            {
+                val = (val + otherStr.charCodeAt(i) * otherStr.charCodeAt(i)) % 65536;
+            }
+
+            for (let i = 0; i < input.length; i++)
+            {
+                let newVal = (input.charCodeAt(i) + input.charCodeAt(i) << 8) ^ val;
+                returnable.push(newVal);
+            }
+
+            return returnable.reverse();
+        }
+
+        function b(input, otherStr)
+        {
+            let val = 0
+            for (let i = 0; i < otherStr.length; i++)
+            {
+                val = (val + otherStr.charCodeAt(i)) % 256;
+            }
+
+            let returnable = [];
+            for (let i = 0; i < input.length * 2; i++)
+            {
+                val += input.charCodeAt(i % input.length);
+                returnable.push(otherStr.charCodeAt(val % otherStr.length));
+            }
+
+            return returnable.reverse();
+        }
